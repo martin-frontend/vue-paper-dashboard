@@ -10,6 +10,7 @@ import Icons from "@/pages/Icons.vue";
 import Maps from "@/pages/Maps.vue";
 import Typography from "@/pages/Typography.vue";
 import TableList from "@/pages/TableList.vue";
+import Login from "@/pages/Login";
 
 const routes = [
   {
@@ -53,6 +54,11 @@ const routes = [
         component: TableList
       }
     ]
+  },
+  { 
+    path: "/login",
+    name: "login",
+    component: Login 
   },
   { path: "*", component: NotFound }
 ];
