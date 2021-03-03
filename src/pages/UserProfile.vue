@@ -1,31 +1,98 @@
 <template>
     <div class="row">
-      <div class="col-xl-4 col-lg-5 col-md-6">
-        <user-card>
-
-        </user-card>
-        <members-card>
-
-        </members-card>
+      <div class="col-md-3">
+        <fg-input type="text"
+                  label="Account"
+                  placeholder="Account"
+                  v-model="user.username">
+        </fg-input>
       </div>
-      <div class="col-xl-8 col-lg-7 col-md-6">
-        <edit-profile-form>
+      <p-button type="info" round @click.native.prevent="handleSearch">
+        Seacher
+      </p-button>
+      <div class="line"></div>
+      <div class="col-12">
+        <card :title="table.title" :subTitle="table.subTitle">
+          <div slot="raw-content" class="table-responsive">
+            <paper-table :data="table.data" :columns="table.columns">
 
-        </edit-profile-form>
+            </paper-table>
+            <el-pagination
+              background
+              @size-change="handleSizeChange"
+              @current-change="handleCurrentChange"
+              :current-page.sync="pageNumber"
+              :page-sizes="[10, 20, 50, 100]"
+              :page-size="pageSize"
+              layout="sizes, prev, pager, next"
+              :total="totalElements">
+            </el-pagination>
+          </div>
+        </card>
       </div>
     </div>
 </template>
 <script>
-import EditProfileForm from "./UserProfile/EditProfileForm.vue";
-import UserCard from "./UserProfile/UserCard.vue";
-import MembersCard from "./UserProfile/MembersCard.vue";
+import { PaperTable } from "@/components";
+import { getUser } from '@/api/user';
+
 export default {
   components: {
-    EditProfileForm,
-    UserCard,
-    MembersCard
+    PaperTable
+  },
+  data() {
+    return {
+      user: {},
+      table: {
+        title: "使用者資訊",
+        // subTitle: "555555555",
+        columns: ["Id", "Account", "Name"],
+        data: []
+      },
+      pageNumber: 1,
+      totalElements: 0,
+      pageSize: 10
+    };
+  },
+  mounted() {
+    this.handleSearch()
+  },
+  methods: {
+    handleSearch() {
+      const newObject = {
+        page: this.pageNumber,
+        size: this.pageSize
+      }
+      if(this.user.username) {
+        newObject.account = this.user.username
+      }
+      getUser(newObject).then((res)=> {
+        const { data } = res.data
+        const { content, totalElements } = data
+        this.table.data = [{id:1,account:'123',name:'444'}]
+      })
+    },
+    handleSizeChange(val) {
+      console.log(`每页 ${val} 条`);
+    },
+    handleCurrentChange(val) {
+      console.log(`当前页: ${val}`);
+    }
   }
 };
 </script>
-<style>
+<style lang="scss" scoped>
+/deep/ .btn {
+  margin: 30px 10px 15px;
+}
+/deep/ .el-pagination {
+  text-align: right;
+  padding: 0 20px 20px;
+}
+.line {
+  width: 100%;
+  height: 1px;
+  background: #66615B;
+  margin: 0 15px 15px;
+}
 </style>
