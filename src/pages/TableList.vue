@@ -1,68 +1,39 @@
 <template>
     <div class="row">
+      <div class="col-md-3">
+        <fg-input type="text"
+                  label="Account"
+                  placeholder="Account"
+                  v-model="user.username">
+        </fg-input>
+      </div>
+      <p-button type="info" round @click.native.prevent="handleSearch">
+        Seacher
+      </p-button>
       <div class="col-12">
-        <card :title="table1.title" :subTitle="table1.subTitle">
+        <card :title="table.title" :subTitle="table.subTitle">
           <div slot="raw-content" class="table-responsive">
-            <paper-table :data="table1.data" :columns="table1.columns">
+            <paper-table :data="table.data" :columns="table.columns">
 
             </paper-table>
+            <el-pagination
+              background
+              @size-change="handleSizeChange"
+              @current-change="handleCurrentChange"
+              :current-page.sync="pageNumber"
+              :page-sizes="[10, 20, 50, 100]"
+              :page-size="pageSize"
+              layout="sizes, prev, pager, next"
+              :total="totalElements">
+            </el-pagination>
           </div>
         </card>
       </div>
-
-      <div class="col-12">
-        <card class="card-plain">
-          <div class="table-full-width table-responsive">
-            <paper-table type="hover" :title="table2.title" :sub-title="table2.subTitle" :data="table2.data"
-                         :columns="table2.columns">
-
-            </paper-table>
-          </div>
-        </card>
-      </div>
-
     </div>
 </template>
 <script>
 import { PaperTable } from "@/components";
-const tableColumns = ["Id", "Name", "Salary", "Country", "City"];
-const tableData = [
-  {
-    id: 1,
-    name: "Dakota Rice",
-    salary: "$36.738",
-    country: "Niger",
-    city: "Oud-Turnhout"
-  },
-  {
-    id: 2,
-    name: "Minerva Hooper",
-    salary: "$23,789",
-    country: "Curaçao",
-    city: "Sinaai-Waas"
-  },
-  {
-    id: 3,
-    name: "Sage Rodriguez",
-    salary: "$56,142",
-    country: "Netherlands",
-    city: "Baileux"
-  },
-  {
-    id: 4,
-    name: "Philip Chaney",
-    salary: "$38,735",
-    country: "Korea, South",
-    city: "Overland Park"
-  },
-  {
-    id: 5,
-    name: "Doris Greene",
-    salary: "$63,542",
-    country: "Malawi",
-    city: "Feldkirchen in Kärnten"
-  }
-];
+import { getUser } from '@/api/user';
 
 export default {
   components: {
@@ -70,21 +41,51 @@ export default {
   },
   data() {
     return {
-      table1: {
-        title: "Stripped Table",
-        subTitle: "Here is a subtitle for this table",
-        columns: [...tableColumns],
-        data: [...tableData]
+      user: {},
+      table: {
+        title: "使用者資訊",
+        // subTitle: "555555555",
+        columns: ["Id", "Account", "Name"],
+        data: []
       },
-      table2: {
-        title: "Table on Plain Background",
-        subTitle: "Here is a subtitle for this table",
-        columns: [...tableColumns],
-        data: [...tableData]
-      }
+      pageNumber: 1,
+      totalElements: 0,
+      pageSize: 10
     };
+  },
+  mounted() {
+    this.handleSearch()
+  },
+  methods: {
+    handleSearch() {
+      const newObject = {
+        page: this.pageNumber,
+        size: this.pageSize
+      }
+      if(this.user.username) {
+        newObject.account = this.user.username
+      }
+      getUser(newObject).then((res)=> {
+        const { data } = res.data
+        const { content, totalElements } = data
+        this.table.data = [{id:1,account:'123',name:'444'}]
+      })
+    },
+    handleSizeChange(val) {
+      console.log(`每页 ${val} 条`);
+    },
+    handleCurrentChange(val) {
+      console.log(`当前页: ${val}`);
+    }
   }
 };
 </script>
-<style>
+<style lang="scss" scoped>
+/deep/ .btn {
+  margin: 30px 10px 15px;
+}
+/deep/ .el-pagination {
+  text-align: right;
+  padding: 0 20px 20px;
+}
 </style>

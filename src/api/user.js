@@ -21,3 +21,11 @@ export function logout() {
     method: 'delete'
   })
 }
+
+export function getUser(params) {
+  return request({
+    url: '/user',
+    method: 'get',
+    params
+  })
+}
