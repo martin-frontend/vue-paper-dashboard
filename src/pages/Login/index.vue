@@ -16,9 +16,10 @@
             <input v-model="password" type="password" name="" required="">
             <label>password</label>
           </div>
-          <a class="enter-btn" @click="login" href="#">
+          <!-- <a class="enter-btn" @click="login" href="#">
             Enter
-          </a>
+          </a> -->
+          <p-button round outline block @click.native="login">Enter</p-button>
         </form>
       </div>
     </div>
