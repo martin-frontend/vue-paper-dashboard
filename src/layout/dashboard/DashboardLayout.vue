@@ -37,7 +37,7 @@
       </mobile-menu>
     </side-bar>
     <div class="main-panel">
-      <!-- <top-navbar></top-navbar> -->
+      <top-navbar></top-navbar>
 
       <dashboard-content @click.native="toggleSidebar">
 

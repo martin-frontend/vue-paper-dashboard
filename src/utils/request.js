@@ -1,7 +1,6 @@
 import axios from 'axios'
 // import { MessageBox, Message } from 'element-ui'
-// import store from '@/store'
-import { removeToken } from '@/utils/auth'
+import store from '@/store'
 
 // create an axios instance
 const service = axios.create({
@@ -45,7 +44,7 @@ service.interceptors.response.use(
   response => {
     const res = response
     // if the custom code is not 20000, it is judged as an error.
-    if (res.status !== 200) {
+    if (res.status !== 200 && res.status !== 204) {
       // Message({
       //   message: res.message || 'Error',
       //   type: 'error',
@@ -77,7 +76,9 @@ service.interceptors.response.use(
     //   type: 'error',
     //   duration: 5 * 1000
     // })
-    removeToken()
+    store.dispatch('user/resetToken').then(() => {
+      location.reload()
+    })
     return Promise.reject(error)
   }
 )

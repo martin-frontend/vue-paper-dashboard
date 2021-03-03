@@ -10,14 +10,14 @@ export function login(params) {
 
 export function getInfo() {
   return request({
-    url: '/getinfo',
+    url: '/user/info',
     method: 'get'
   })
 }
 
 export function logout() {
   return request({
-    url: '/vue-element-admin/user/logout',
-    method: 'post'
+    url: '/public/logout',
+    method: 'delete'
   })
 }

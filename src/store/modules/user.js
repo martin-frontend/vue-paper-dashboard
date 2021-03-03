@@ -1,4 +1,4 @@
-import { login } from '@/api/user'
+import { login, logout, getInfo } from '@/api/user'
 import { getToken, setToken, removeToken } from '@/utils/auth'
 // import router, { resetRouter } from '@/router'
 
@@ -57,60 +57,34 @@ const actions = {
   },
 
   // get user info
-  // getInfo({ commit, state }, authUser) {
-  //   // return new Promise((resolve, reject) => {
-  //   //   getInfo(state.token).then(response => {
-  //   //     const { data } = response
-
-  //   //     if (!data) {
-  //   //       reject('Verification failed, please Login again.')
-  //   //     }
-
-  //   //     const { roles, name, avatar, introduction } = data
-
-  //   //     // roles must be a non-empty array
-  //   //     if (!roles || roles.length <= 0) {
-  //   //       reject('getInfo: roles must be a non-null array!')
-  //   //     }
-
-  //   //     commit('SET_ROLES', roles)
-  //   //     commit('SET_NAME', name)
-  //   //     commit('SET_AVATAR', avatar)
-  //   //     commit('SET_INTRODUCTION', introduction)
-  //   //     resolve(data)
-  //   //   }).catch(error => {
-  //   //     reject(error)
-  //   //   })
-  //   // })
-  //   const roles = [authUser.user.name]
-  //   const menu = authUser.routes
-  //   commit('SET_AUTHUSER', authUser.user)
-  //   commit('SET_ROLES', roles)
-  //   commit('SET_NAME', authUser.user.name)
-  //   commit('SET_AVATAR', authUser.added.icon)
-  //   commit('SET_MENU', menu)
-  //   //     commit('SET_INTRODUCTION', introduction)
-  // },
+  getInfo({ commit, state }, authUser) {
+    return new Promise((resolve, reject) => {
+      getInfo(state.token).then(response => {
+        const { user } = response.data.refresh
+        commit('SET_AUTHUSER', user)
+        resolve()
+      }).catch(error => {
+        alert(error.response.data.message)
+        reject(error)
+      })
+    })
+  },
 
   // user logout
-  // logout({ commit, state, dispatch }) {
-  //   return new Promise((resolve, reject) => {
-  //     logout(state.token).then(() => {
-  //       commit('SET_TOKEN', '')
-  //       commit('SET_ROLES', [])
-  //       removeToken()
-  //       resetRouter()
-
-  //       // reset visited views and cached views
-  //       // to fixed https://github.com/PanJiaChen/vue-element-admin/issues/2485
-  //       dispatch('tagsView/delAllViews', null, { root: true })
-
-  //       resolve()
-  //     }).catch(error => {
-  //       reject(error)
-  //     })
-  //   })
-  // },
+  logout({ commit, state, dispatch }) {
+    console.log('logout');
+    
+    return new Promise((resolve, reject) => {
+      logout().then(() => {
+        commit('SET_AUTHUSER', null)
+        removeToken()
+        // resetRouter()
+        resolve()
+      }).catch(error => {
+        reject(error)
+      })
+    })
+  },
 
   // remove token
   resetToken({ commit }) {
