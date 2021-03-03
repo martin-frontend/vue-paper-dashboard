@@ -10,7 +10,7 @@ import NotFound from "@/pages/NotFoundPage.vue";
 // import Maps from "@/pages/Maps.vue";
 // import Typography from "@/pages/Typography.vue";
 // import TableList from "@/pages/TableList.vue";
-import TableList from "@/pages/TableList.vue";
+import UserProfile from "@/pages/UserProfile.vue";
 import Login from "@/pages/Login";
 
 const routes = [
@@ -22,7 +22,7 @@ const routes = [
       {
         path: "userProfile",
         name: "userProfile",
-        component: TableList
+        component: UserProfile
       }
     ]
   },
