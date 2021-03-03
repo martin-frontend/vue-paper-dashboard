@@ -18,13 +18,13 @@ import App from "./App";
 import router from "./router/index";
 import store from './store'
 import './permission' // permission control
-
+import { Pagination } from 'element-ui';
 
 import PaperDashboard from "./plugins/paperDashboard";
 import "vue-notifyjs/themes/default.css";
 
 Vue.use(PaperDashboard);
-
+Vue.component('el-pagination',Pagination);
 /* eslint-disable no-new */
 new Vue({
   router,
